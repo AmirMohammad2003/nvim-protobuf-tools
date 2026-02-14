@@ -336,14 +336,7 @@ require('nvim-protobuf').setup({
 })
 ```
 
-## Contributing
-
-Contributions are welcome! Please open an issue or pull request.
-
-## License
-
-MIT
 
 ## Acknowledgments
 
-Inspired by [protobuf-vsc-extension](https://github.com/DrBlury/protobuf-vsc-extension) for VSCode.
+[protobuf-vsc-extension](https://github.com/DrBlury/protobuf-vsc-extension)
