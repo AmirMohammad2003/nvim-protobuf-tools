@@ -28,24 +28,13 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  "nvim-protobuf",
+  "amirmohammad2003/nvim-protobuf",
   dev = true, -- If developing locally
   config = function()
     require("nvim-protobuf").setup({
       -- Your configuration here
     })
   end,
-}
-```
-
-Using [packer.nvim](https://github.com/wbthomason/packer.nvim):
-
-```lua
-use {
-  'your-username/nvim-protobuf',
-  config = function()
-    require('nvim-protobuf').setup({})
-  end
 }
 ```
 
