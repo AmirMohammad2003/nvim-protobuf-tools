@@ -107,7 +107,8 @@ function M.lint(file_path)
 
   local utils = require('nvim-protobuf.utils')
   local config = require('nvim-protobuf.config').get()
-  local linter_name = config.externalLinter.linter
+  local linter_config = config.externalLinter
+  local linter_name = linter_config.linter
 
   if linter_name == 'none' then
     utils.notify('No linter configured', vim.log.levels.WARN)
@@ -121,10 +122,20 @@ function M.lint(file_path)
     return
   end
 
+  -- Get linter-specific path from config
+  local linter_path = linter.cmd
+  if linter_name == 'buf' and linter_config.bufPath then
+    linter_path = linter_config.bufPath
+  elseif linter_name == 'protolint' and linter_config.protolintPath then
+    linter_path = linter_config.protolintPath
+  elseif linter_name == 'api-linter' and linter_config.apiLinterPath then
+    linter_path = linter_config.apiLinterPath
+  end
+
   -- Check if linter exists
-  if not utils.command_exists(linter.cmd) then
+  if not utils.command_exists(linter_path) then
     utils.notify(
-      string.format('%s not found. Please install it to use linting.', linter.cmd),
+      string.format('%s not found. Please install it to use linting.', linter_path),
       vim.log.levels.ERROR
     )
     return
@@ -133,11 +144,34 @@ function M.lint(file_path)
   local job = require('nvim-protobuf.job')
 
   -- Build command
-  local cmd = { linter.cmd }
+  local cmd = { linter_path }
+
+  -- Add config file if specified
+  local config_path = nil
+  if linter_name == 'buf' and linter_config.bufConfigPath and linter_config.bufConfigPath ~= '' then
+    config_path = linter_config.bufConfigPath
+    table.insert(cmd, '--config')
+    table.insert(cmd, config_path)
+  elseif linter_name == 'protolint' and linter_config.protolintConfigPath and linter_config.protolintConfigPath ~= '' then
+    config_path = linter_config.protolintConfigPath
+    table.insert(cmd, '-config_path')
+    table.insert(cmd, config_path)
+  elseif linter_name == 'api-linter' and linter_config.apiLinterConfigPath and linter_config.apiLinterConfigPath ~= '' then
+    config_path = linter_config.apiLinterConfigPath
+    table.insert(cmd, '--config')
+    table.insert(cmd, config_path)
+  end
+
+  -- Add linter-specific arguments
   vim.list_extend(cmd, linter.args(file_path))
 
   -- Clear previous linter diagnostics
   require('nvim-protobuf.diagnostics').clear('linter')
+
+  -- Log command if debug enabled
+  if config.debug and config.debug.verboseLogging then
+    utils.notify('Running: ' .. table.concat(cmd, ' '), vim.log.levels.DEBUG)
+  end
 
   -- Execute linter
   job.run({

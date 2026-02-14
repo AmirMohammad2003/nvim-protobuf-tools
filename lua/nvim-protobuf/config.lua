@@ -4,37 +4,150 @@ local M = {}
 
 -- Default configuration matching VSCode extension defaults
 local defaults = {
+  -- Protoc compilation settings
   protoc = {
     path = 'protoc',
     options = {},
     compileOnSave = false,
+    useAbsolutePath = false,
+    excludePatterns = {},
   },
+
+  -- Import search paths
   includes = {},
+  protoSrcsDir = '',
+
+  -- Formatting settings
   formatOnSave = false,
+  indentSize = 2,
+  useTabIndent = false,
+  maxLineLength = 120,
+
   formatter = {
     enabled = true,
+    preset = 'minimal', -- 'minimal', 'google', 'buf', 'custom'
     type = 'builtin', -- 'builtin', 'clang-format', 'buf'
+    alignFields = true,
     insertEmptyLineBetweenDefinitions = true,
     maxEmptyLines = 1,
+    preserveMultiLineFields = false,
   },
+
+  -- Clang-format settings
   clangFormat = {
     enabled = false,
+    path = 'clang-format',
     style = 'file',
+    fallbackStyle = 'Google',
+    configPath = '',
   },
+
+  -- Import organization
+  organizeImports = {
+    enabled = true,
+    groupByCategory = true,
+  },
+
+  -- External linter settings
   externalLinter = {
-    linter = 'none', -- 'none', 'buf', 'protolint', 'api-linter'
     enabled = false,
-    runOnSave = false,
+    linter = 'none', -- 'none', 'buf', 'protolint', 'api-linter'
+    runOnSave = true,
+
+    -- Tool paths
+    bufPath = 'buf',
+    protolintPath = 'protolint',
+    apiLinterPath = 'api-linter',
+
+    -- Config file paths
+    bufConfigPath = '',
+    protolintConfigPath = '',
+    apiLinterConfigPath = '',
   },
+
+  -- Buf CLI settings
+  buf = {
+    path = 'buf',
+    useManaged = false,
+  },
+
+  -- Breaking change detection
   breaking = {
     enabled = false,
-    againstGitRef = 'main',
+    againstStrategy = 'git', -- 'git', 'file', 'none'
+    againstGitRef = 'HEAD~1',
+    againstFilePath = '',
   },
-  -- Neovim-specific additions
+
+  -- Field renumbering
+  renumber = {
+    startNumber = 1,
+    increment = 1,
+    preserveReserved = true,
+    skipInternalRange = true, -- Skip 19000-19999
+    autoSuggestNext = true,
+    onFormat = false,
+  },
+
+  -- Diagnostic settings
   diagnostics = {
     enabled = true,
+    useBuiltIn = true,
+
+    -- Diagnostic types
+    namingConventions = true,
+    referenceChecks = true,
+    importChecks = true,
+    fieldTagChecks = true,
+    duplicateFieldChecks = true,
+    discouragedConstructs = true,
+    deprecatedUsage = true,
+    unusedSymbols = false,
+    circularDependencies = true,
+    documentationComments = true,
+    breakingChanges = false,
+
+    -- Severity levels
+    severity = {
+      namingConventions = vim.diagnostic.severity.WARN,
+      referenceErrors = vim.diagnostic.severity.ERROR,
+      fieldTagIssues = vim.diagnostic.severity.ERROR,
+      discouragedConstructs = vim.diagnostic.severity.WARN,
+      nonCanonicalImportPath = vim.diagnostic.severity.WARN,
+      breakingChanges = vim.diagnostic.severity.ERROR,
+    },
+
+    -- Neovim-specific
     virtual_text = true,
     signs = true,
+  },
+
+  -- Completion settings
+  completion = {
+    autoImport = true,
+    includeGoogleTypes = true,
+  },
+
+  -- Hover settings
+  hover = {
+    showFieldNumbers = true,
+    showDocumentation = true,
+  },
+
+  -- Code generation
+  codegen = {
+    generateOnSave = false,
+    tool = 'buf', -- 'protoc', 'buf'
+    profiles = {},
+  },
+
+  -- Parser settings
+  parser = 'tree-sitter', -- 'tree-sitter', 'legacy'
+
+  -- Debug settings
+  debug = {
+    verboseLogging = false,
+    logLevel = 'info', -- 'error', 'warn', 'info', 'debug', 'verbose'
   },
 }
 

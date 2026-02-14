@@ -61,6 +61,13 @@ end, {
   desc = 'Show schema dependency graph',
 })
 
+-- Register :ProtobufOrganizeImports command
+vim.api.nvim_create_user_command('ProtobufOrganizeImports', function()
+  require('nvim-protobuf').organize_imports()
+end, {
+  desc = 'Organize and sort imports',
+})
+
 -- Register :ProtobufReloadConfig command
 vim.api.nvim_create_user_command('ProtobufReloadConfig', function()
   require('nvim-protobuf').reload_config()
