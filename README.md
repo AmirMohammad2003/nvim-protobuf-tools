@@ -1,4 +1,4 @@
-# nvim-protobuf
+# nvim-protobuf-tools
 
 Protocol Buffers development tools for Neovim.
 
