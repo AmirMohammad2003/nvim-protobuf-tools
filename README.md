@@ -1,6 +1,8 @@
 # nvim-protobuf
 
-Protocol Buffers development tools for Neovim with full VSCode workspace compatibility.
+Protocol Buffers development tools for Neovim.
+
+> **Note:** This plugin was built with [Claude Code](https://claude.ai/code).
 
 ## Features
 
@@ -339,4 +341,4 @@ require('nvim-protobuf').setup({
 
 ## Acknowledgments
 
-[protobuf-vsc-extension](https://github.com/DrBlury/protobuf-vsc-extension)
+[protobuf-vsc-extension](https://github.com/DrBlury/protobuf-vsc-extension) 
